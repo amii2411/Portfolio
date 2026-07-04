@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amisha Chaudhary — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14213D;
+    --ink-soft:#233459;
+    --paper:#FAF7F1;
+    --paper-dim:#F1ECE1;
+    --gold:#C9A15D;
+    --gold-soft:#E4CB9C;
+    --rose:#B5654A;
+    --slate:#5B6472;
+    --line:#E4DFD3;
+    --line-dark:rgba(250,247,241,0.14);
+    --radius:2px;
+    --ease:cubic-bezier(.22,.9,.32,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--gold-soft); color:var(--ink);}
+  a{color:inherit; text-decoration:none;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--rose);
+    display:flex;
+    align-items:center;
+    gap:0.6em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:24px; height:1px;
+    background:var(--rose);
+    display:inline-block;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.01em;}
+  .container{max-width:1080px; margin:0 auto; padding:0 32px;}
+  section{position:relative;}
+
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity 0.9s var(--ease), transform 0.9s var(--ease);}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  .stagger > * { transition-delay:calc(var(--i,0) * 90ms); }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 40px;
+    mix-blend-mode:normal;
+    transition:background 0.4s var(--ease), padding 0.4s var(--ease), box-shadow .4s var(--ease);
+  }
+  .nav.scrolled{
+    background:rgba(250,247,241,0.86);
+    backdrop-filter:blur(10px);
+    padding:14px 40px;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .nav-logo{
+    font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem;
+    letter-spacing:0.02em;
+  }
+  .nav-logo span{color:var(--rose);}
+  .nav-links{display:flex; gap:34px; list-style:none;}
+  .nav-links a{
+    font-size:0.82rem; letter-spacing:0.04em; text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;
+    position:relative; padding-bottom:4px; color:var(--ink);
+  }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--rose); transition:width .35s var(--ease);
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; z-index:110;}
+  .nav-toggle span{width:22px; height:2px; background:var(--ink); transition:transform .3s, opacity .3s;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:160px 0 100px;
+    position:relative;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; top:0; right:-10%; width:60%; height:100%;
+    background:
+      radial-gradient(circle at 70% 30%, rgba(201,161,93,0.16), transparent 55%),
+      radial-gradient(circle at 40% 70%, rgba(181,101,74,0.10), transparent 50%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .hero-inner{position:relative; z-index:1;}
+  .hero .eyebrow{margin-bottom:22px;}
+  .hero h1{
+    font-size:clamp(3rem, 8vw, 6.4rem);
+    line-height:0.98;
+    margin-bottom:6px;
+    background:linear-gradient(180deg, var(--ink) 60%, var(--ink-soft));
+    -webkit-background-clip:text; background-clip:text;
+  }
+  .hero h1 em{
+    font-style:italic; font-weight:500; color:var(--rose);
+  }
+  .hero-role{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:500;
+    font-size:clamp(1.1rem,2.4vw,1.5rem); color:var(--slate); margin-bottom:28px;
+  }
+  .hero-desc{max-width:520px; color:var(--slate); font-size:1.02rem; margin-bottom:38px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:12px;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace; font-size:0.78rem;
+    border:1px solid var(--line); border-radius:999px;
+    padding:9px 18px; display:inline-flex; align-items:center; gap:8px;
+    transition:border-color .3s var(--ease), transform .3s var(--ease), background .3s var(--ease);
+    background:rgba(255,255,255,0.4);
+  }
+  .chip:hover{border-color:var(--rose); transform:translateY(-2px); background:#fff;}
+  .chip svg{width:14px; height:14px; stroke:var(--rose); flex-shrink:0;}
+  .scroll-cue{
+    position:absolute; bottom:36px; left:32px; display:flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--slate);
+    letter-spacing:0.12em; text-transform:uppercase;
+  }
+  .scroll-cue .line{width:1px; height:40px; background:var(--line); position:relative; overflow:hidden;}
+  .scroll-cue .line::after{
+    content:""; position:absolute; top:-100%; left:0; width:100%; height:100%;
+    background:var(--rose); animation:scrollmove 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollmove{0%{top:-100%;} 50%{top:0;} 100%{top:100%;}}
+
+  /* ---------- SECTION HEAD ---------- */
+  .sec-head{margin-bottom:56px;}
+  .sec-head h2{font-size:clamp(2rem,4vw,2.8rem); margin-top:12px;}
+  .sec-head p{color:var(--slate); max-width:520px; margin-top:14px;}
+
+  section.block{padding:110px 0;}
+  section.block.tinted{background:var(--paper-dim);}
+  section.block.dark{background:var(--ink); color:var(--paper);}
+  .dark .eyebrow{color:var(--gold);}
+  .dark .eyebrow::before{background:var(--gold);}
+  .dark .sec-head p{color:#B8C0D4;}
+
+  /* ---------- JOURNEY / GROWTH LINE ---------- */
+  .journey-chart{width:100%; overflow:visible;}
+  .journey-path{
+    fill:none; stroke:var(--rose); stroke-width:2.4;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:2000; stroke-dashoffset:2000;
+    transition:stroke-dashoffset 2.2s var(--ease);
+  }
+  .in-view .journey-path{stroke-dashoffset:0;}
+  .journey-dot{fill:var(--paper); stroke:var(--rose); stroke-width:2.4; opacity:0; transform-origin:center;
+    transition:opacity .5s var(--ease), r .4s var(--ease);}
+  .in-view .journey-dot{opacity:1;}
+  .journey-dot:hover{fill:var(--rose); r:7;}
+  .journey-milestones{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-top:26px;
+  }
+  .m-item{
+    border-top:1px solid var(--line); padding-top:14px;
+  }
+  .m-year{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--rose); letter-spacing:0.06em;}
+  .m-title{font-family:'Fraunces',serif; font-size:1rem; font-weight:600; margin-top:6px; line-height:1.25;}
+  .m-sub{font-size:0.82rem; color:var(--slate); margin-top:4px;}
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-list{display:flex; flex-direction:column;}
+  .exp-card{
+    display:grid; grid-template-columns:180px 1fr; gap:32px;
+    padding:34px 0; border-bottom:1px solid var(--line-dark);
+    transition:padding-left .4s var(--ease);
+  }
+  .exp-card:hover{padding-left:14px;}
+  .exp-when{font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--gold); letter-spacing:0.04em;}
+  .exp-role{font-family:'Fraunces',serif; font-size:1.5rem; font-weight:600; margin-bottom:6px;}
+  .exp-org{color:#B8C0D4; font-size:0.92rem; margin-bottom:14px;}
+  .exp-steps{display:flex; flex-direction:column; gap:10px; margin-top:8px;}
+  .exp-step{display:flex; align-items:baseline; gap:12px; font-size:0.92rem; color:#DCE1EE;}
+  .exp-step .dot{width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0;}
+  .exp-step .stitle{color:var(--paper); font-weight:500;}
+  .exp-step .swhen{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--gold-soft); margin-left:auto;}
+
+  /* ---------- SKILLS ---------- */
+  .skill-grid{display:flex; flex-wrap:wrap; gap:12px;}
+  .skill-pill{
+    font-size:0.9rem; padding:11px 20px; border:1px solid var(--line);
+    border-radius:999px; background:#fff; transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+    opacity:0; transform:translateY(14px);
+  }
+  .skill-grid.in-view .skill-pill{opacity:1; transform:translateY(0);}
+  .skill-pill:hover{transform:translateY(-4px); box-shadow:0 10px 24px rgba(20,33,61,0.10); border-color:var(--rose);}
+
+  /* ---------- ACHIEVEMENTS ---------- */
+  .ach-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--line);}
+  .ach-item{
+    background:var(--paper); padding:30px 28px; display:flex; gap:18px; align-items:flex-start;
+  }
+  .ach-icon{
+    width:34px; height:34px; flex-shrink:0; border-radius:50%;
+    border:1px solid var(--gold); display:flex; align-items:center; justify-content:center;
+  }
+  .ach-icon svg{width:16px; height:16px; stroke:var(--gold);}
+  .ach-text{font-size:0.98rem;}
+
+  /* ---------- EXTRA (activities / hobbies) ---------- */
+  .extra-grid{display:grid; grid-template-columns:1fr 1fr; gap:60px;}
+  .extra-col h3{font-family:'Fraunces',serif; font-size:1.3rem; margin-bottom:20px;}
+  .tag-list{display:flex; flex-wrap:wrap; gap:10px;}
+  .tag{
+    font-size:0.86rem; padding:8px 16px; border:1px dashed var(--line); border-radius:999px;
+    color:var(--slate); transition:border-color .3s, color .3s;
+  }
+  .tag:hover{border-color:var(--rose); color:var(--rose);}
+  .lang-row{display:flex; gap:24px; margin-top:8px;}
+  .lang-item{font-family:'IBM Plex Mono',monospace; font-size:0.82rem;}
+
+  /* ---------- FOOTER / CONTACT ---------- */
+  footer{background:var(--ink); color:var(--paper); padding:110px 0 50px;}
+  .contact-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:60px; align-items:start;}
+  footer h2{font-size:clamp(2.2rem,5vw,3.4rem); color:var(--paper); line-height:1.05;}
+  .contact-links{margin-top:34px; display:flex; flex-direction:column; gap:16px;}
+  .contact-link{
+    display:flex; align-items:center; gap:14px; font-size:1.02rem;
+    padding-bottom:14px; border-bottom:1px solid var(--line-dark);
+    transition:gap .3s var(--ease), color .3s;
+  }
+  .contact-link:hover{gap:20px; color:var(--gold);}
+  .contact-link svg{width:16px; height:16px; stroke:var(--gold);}
+  .declaration{
+    font-size:0.86rem; color:#9AA4BC; border-top:1px solid var(--line-dark); margin-top:70px; padding-top:26px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px;
+  }
+  .sig{font-family:'Fraunces',serif; font-style:italic; color:var(--paper);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    .container{padding:0 22px;}
+    .nav{padding:18px 22px;}
+    .nav-links{position:fixed; top:0; right:0; height:100vh; width:min(78vw,320px);
+      background:var(--paper); flex-direction:column; justify-content:center; align-items:flex-start;
+      gap:26px; padding:0 40px; transform:translateX(100%); transition:transform .45s var(--ease);
+      box-shadow:-10px 0 40px rgba(0,0,0,0.08);
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-toggle{display:flex;}
+    .journey-milestones{grid-template-columns:repeat(2,1fr);}
+    .exp-card{grid-template-columns:1fr;}
+    .exp-when{margin-bottom:4px;}
+    .ach-grid{grid-template-columns:1fr;}
+    .extra-grid{grid-template-columns:1fr; gap:40px;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:500px){
+    .journey-milestones{grid-template-columns:1fr 1fr;}
+    section.block{padding:80px 0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reveal{opacity:1; transform:none;}
+    .journey-path{stroke-dashoffset:0;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-logo">A<span>.</span>C<span>.</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div class="eyebrow"> Insurance Operations</div>
+    <h1>Amisha<br><em>Chaudhary</em></h1>
+    <div class="hero-role">Officer, HDFC ERGO General Insurance — Ghaziabad</div>
+    <p class="hero-desc">A BBA graduate building a career at the intersection of human resources and insurance operations — three promotions in under two years, grounded in steady communication, adaptability, and a genuine care for people and process.</p>
+    <div class="chip-row">
+      <div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>96678 95641</div>
+      <div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>amishachaudhary2411@gmail.com</div>
+      <a class="chip" href="https://www.linkedin.com/in/amisha-chaudhary-ba55b8245" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
+      <div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Ghaziabad, India</div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>Scroll</div>
+</section>
+
+<!-- JOURNEY -->
+<section class="block" id="journey">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The Climb</div>
+      <h2>Six years, six steps upward</h2>
+      <p>From classroom to career — a straight line of steady progress, not a leap. Every milestone below actually happened, in order.</p>
+    </div>
+
+    <div class="reveal">
+      <svg class="journey-chart" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true">
+        <path class="journey-path" d="M20,230 L180,190 L340,150 L500,120 L660,80 L820,45 L980,15"/>
+        <circle class="journey-dot" cx="20"  cy="230" r="5.5"/>
+        <circle class="journey-dot" cx="180" cy="190" r="5.5"/>
+        <circle class="journey-dot" cx="340" cy="150" r="5.5"/>
+        <circle class="journey-dot" cx="500" cy="120" r="5.5"/>
+        <circle class="journey-dot" cx="660" cy="80"  r="5.5"/>
+        <circle class="journey-dot" cx="820" cy="45"  r="5.5"/>
+        <circle class="journey-dot" cx="980" cy="15"  r="5.5"/>
+      </svg>
+
+      <div class="journey-milestones">
+        <div class="m-item"><div class="m-year">2018</div><div class="m-title">Higher Secondary</div><div class="m-sub">New Era School, CBSE</div></div>
+        <div class="m-item"><div class="m-year">2020</div><div class="m-title">Senior Secondary</div><div class="m-sub">New Era School, CBSE</div></div>
+        <div class="m-item"><div class="m-year">2020–23</div><div class="m-title">BBA</div><div class="m-sub">Institute of Technology &amp; Science, Ghaziabad</div></div>
+        <div class="m-item"><div class="m-year">2023</div><div class="m-title">Internship, Muthoot Finance</div><div class="m-sub">6 months</div></div>
+        <div class="m-item"><div class="m-year">2023</div><div class="m-title">Decathlon Sports</div><div class="m-sub">3 months</div></div>
+        <div class="m-item"><div class="m-year">2023–25</div><div class="m-title">HDFC ERGO</div><div class="m-sub">Associate → Officer</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="block dark" id="experience">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Where the work happened</div>
+      <h2>Experience</h2>
+      <p>Every role added a layer — operations at a finance major, retail at a global sports brand, then a fast rise through insurance.</p>
+    </div>
+
+    <div class="exp-list">
+      <div class="exp-card reveal">
+        <div class="exp-when">6 MONTHS · 2023</div>
+        <div>
+          <div class="exp-role">Internship</div>
+          <div class="exp-org">Muthoot Finance</div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-when">3 MONTHS · 2023</div>
+        <div>
+          <div class="exp-role">Job</div>
+          <div class="exp-org">Decathlon Sports</div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-when">OCT 2023 — PRESENT</div>
+        <div>
+          <div class="exp-role">HDFC ERGO General Insurance</div>
+          <div class="exp-org">Three roles, two years, one company</div>
+          <div class="exp-steps">
+            <div class="exp-step"><span class="dot"></span><span class="stitle">Associate</span><span class="swhen">Oct 2023 – Apr 2024</span></div>
+            <div class="exp-step"><span class="dot"></span><span class="stitle">Senior Associate</span><span class="swhen">Apr 2024 – Apr 2025</span></div>
+            <div class="exp-step"><span class="dot"></span><span class="stitle">Officer</span><span class="swhen">Apr 2025 – Current</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="block" id="skills">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Key Skills Proficiency</div>
+      <h2>What she brings to a team</h2>
+    </div>
+    <div class="skill-grid reveal" id="skillGrid">
+      <div class="skill-pill" style="--i:0">Good communication</div>
+      <div class="skill-pill" style="--i:1">Leadership</div>
+      <div class="skill-pill" style="--i:2">Quick learner</div>
+      <div class="skill-pill" style="--i:3">Problem solving</div>
+      <div class="skill-pill" style="--i:4">Adaptability</div>
+      <div class="skill-pill" style="--i:5">Creativity</div>
+      <div class="skill-pill" style="--i:6">Empathy</div>
+      <div class="skill-pill" style="--i:7">Self-motivation</div>
+      <div class="skill-pill" style="--i:8">Time management</div>
+      <div class="skill-pill" style="--i:9">Hard worker</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="block tinted" id="achievements">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Recognition</div>
+      <h2>Achievements</h2>
+    </div>
+    <div class="ach-grid reveal">
+      <div class="ach-item">
+        <div class="ach-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2 15 8l6.5 1-4.8 4.4L18 20 12 16.5 6 20l1.3-6.6L2.5 9l6.5-1z"/></svg></div>
+        <div class="ach-text">First prize, dance competition</div>
+      </div>
+      <div class="ach-item">
+        <div class="ach-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H3a4 4 0 0 0 4 4M17 6h4a4 4 0 0 1-4 4"/></svg></div>
+        <div class="ach-text">Winner of Farewell &amp; Miss Farewell Award</div>
+      </div>
+      <div class="ach-item">
+        <div class="ach-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="ach-text">Certificate — Biz-Fiesta, college activity</div>
+      </div>
+      <div class="ach-item">
+        <div class="ach-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <div class="ach-text">Certificate — Supply Chain Management</div>
+      </div>
+      <div class="ach-item">
+        <div class="ach-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="ach-text">Certificate — NSS (National Service Scheme)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXTRA -->
+<section class="block" id="extra">
+  <div class="container extra-grid">
+    <div class="extra-col reveal">
+      <h3>Positions &amp; Activities</h3>
+      <div class="tag-list">
+        <span class="tag">Sports Captain</span>
+        <span class="tag">Class Representative</span>
+        <span class="tag">House Captain</span>
+        <span class="tag">Leadership</span>
+      </div>
+    </div>
+    <div class="extra-col reveal">
+      <h3>Beyond Work</h3>
+      <div class="tag-list">
+        <span class="tag">Crafting</span>
+        <span class="tag">Watching movies</span>
+        <span class="tag">Travelling</span>
+        <span class="tag">Dancing</span>
+        <span class="tag">Listening to music</span>
+        <span class="tag">Cooking</span>
+      </div>
+      <div class="lang-row">
+        <div class="lang-item">EN — English</div>
+        <div class="lang-item">HI — Hindi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER / CONTACT -->
+<footer id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="eyebrow">Get in touch</div>
+        <h2>Let's talk about<br>the next step.</h2>
+      </div>
+      <div class="contact-links reveal">
+        <a class="contact-link" href="mailto:amishachaudhary2411@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>amishachaudhary2411@gmail.com</a>
+        <a class="contact-link" href="tel:9667895641"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 96678 95641</a>
+        <a class="contact-link" href="https://www.linkedin.com/in/amisha-chaudhary-ba55b8245" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>linkedin.com/in/amisha-chaudhary</a>
+      </div>
+    </div>
+    <div class="declaration">
+      <div>I hereby declare that the above information is correct to the best of my knowledge and belief.</div>
+      <div class="sig">Amisha Chaudhary</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    navToggle.classList.toggle('active');
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('in-view');
+    });
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.reveal, .skill-grid, .journey-chart').forEach(el => io.observe(el));
+
+  // Journey chart wrapper needs in-view class on parent svg container too
+  document.querySelectorAll('.journey-chart').forEach(el => {
+    const parentObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) el.closest('section').classList.add('in-view'); });
+    }, { threshold: 0.2 });
+    parentObserver.observe(el);
+  });
+</script>
+</body>
+</html>
